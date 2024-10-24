@@ -6,7 +6,9 @@ package com.mycompany.student_mngmnt_group_project;
 
 /**
  *
- * @author deadb
+ * @authors
+ * Caleb Westerman, 
+ * Jonathan Embler
  */
 public class Student_Mngmnt_Group_Project {
 
