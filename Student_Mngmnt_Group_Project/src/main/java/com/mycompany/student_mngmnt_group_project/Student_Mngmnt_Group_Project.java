@@ -1,4 +1,3 @@
-
 package com.mycompany.student_mngmnt_group_project;
 
 /*
@@ -75,10 +74,10 @@ class Student
 
     //mutators
     public void setName(String N)
-    {ClassName = N;}
+    {Name = N;}
     public void setID(String stuId)
-    {ClassID = stuId;}
-    public double setGrade(double grade) //this may also need to be an array, in which case need for loop to copy values
+    {ID = stuId;}
+    public void setGrade(double grade) //this may also need to be an array, in which case need for loop to copy values
     {Grades = grade; }
 }
 
@@ -104,7 +103,7 @@ class Subject
     {ClassName = nm;}
     public void setID(String id)
     {ClassID = id;}
-    public double setGrade(double gr)
+    public void setGrade(double gr)
     {ClassGrade = gr;}
 
 }
