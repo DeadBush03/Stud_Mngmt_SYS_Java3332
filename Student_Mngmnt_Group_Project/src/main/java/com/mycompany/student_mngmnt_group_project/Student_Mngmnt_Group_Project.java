@@ -45,11 +45,66 @@ import java.io.*;
 //Please remember to put your name before the class/method you're working on
 //this is to prevent people from accidentally working on the same thing
 
-public class Student_Mngmnt_Group_Project {
+public class StudentManagementSystem 
+{//I did change the name of this class... "Student_Mngmnt_Group_Project" was the original in case it matters
 
     public static void main(String[] args) 
-    {
-        System.out.println("Hello World!");
+    {  
+        System.out.println("This program takes information from the user about \nstudents, classes, and grades and outputs reports from user input.");
+        System.out.println("STUDENT MANAGEMENT SYSTEM");
     }// end main
     
 }// END OF CLASS
+
+//Caleb --Change this as you see fit, it's very basic
+class Student
+{//this class holds information about a student
+    //attributes: ID, name, grades, etc.)
+    private String ID = "000000"; //id won't be manipulated, it's a string
+    private String Name = "Nameless"; //default name for a student
+    //grades may need to be an array, whose size is the number of 'Subject' classes...
+    private double Grades;
+
+     //accessors
+    public String getName()
+    {return Name;}
+    public String getID()
+    {return ID;}
+    public double getGrade() //remember this may need to be an array
+    {return Grades;}
+
+    //mutators
+    public void setName(String N)
+    {ClassName = N;}
+    public void setID(String stuId)
+    {ClassID = stuId;}
+    public double setGrade(double grade) //this may also need to be an array, in which case need for loop to copy values
+    {Grades = grade; }
+}
+
+//Caleb --Change this as you see fit, it's very basic
+class Subject
+{//this class stores information on a subject like 'Math', 'English', etc
+    //attributes are name, grade, etc.
+    
+    private String ClassName = "No Subject"; //no initial subject
+    private String ClassID = "0000"; //no class id
+    private double ClassGrade = -1.0; //nonsense initial value
+
+    //accessors
+    public String getName()
+    {return ClassName;}
+    public String getID()
+    {return ClassID;}
+    public double getGrade()
+    {return ClassGrade;}
+
+    //mutators
+    public void setName(String nm)
+    {ClassName = nm;}
+    public void setID(String id)
+    {ClassID = id;}
+    public double setGrade(double gr)
+    {ClassGrade = gr;}
+
+}
