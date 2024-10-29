@@ -3,8 +3,8 @@ package com.mycompany.student_mngmnt_group_project;
 /*
  * @authors
  * Caleb Westerman, 
- * Jonathan Embler
- * Jack
+ * Jonathan Embler,
+ * Jack Hebert.
  */
 
 //PROJECT REQUIREMENTS
@@ -45,13 +45,123 @@ import java.io.*;
 //this is to prevent people from accidentally working on the same thing
 
 public class StudentManagementSystem 
-{//I did change the name of this class... "Student_Mngmnt_Group_Project" was the original in case it matters
-
+{
     public static void main(String[] args) 
-    {  
-        System.out.println("This program takes information from the user about \nstudents, classes, and grades and outputs reports from user input.");
+    {           
+        Scanner keyboard = new Scanner(System.in); //user input
+        
+        //----- 
+        //Caleb -- Student and Subject classes for testing
+        //trying to figure out how Student and Subject interact
+        System.out.println("How many students do you have?");
+        int SIZE = keyboard.nextInt(); //I have no validation because this is temporary
+        
+        Student classroom[]= new Student[SIZE]; //student array, holds individual Student objects
+
+        //test student
+        Student testStu = new Student();
+        testStu.setName("Test Student");
+        testStu.setID("69420");
+        testStu.setGrade(100.00);
+        
+        //-----
+        
+        System.out.println("This program takes information from the user about "
+                + "\nstudents, classes, and grades and outputs reports from user input.");
         System.out.println("STUDENT MANAGEMENT SYSTEM");
+
+        int exit = -1; //exit when user says to
+        do 
+        {
+            System.out.println("Enter a number to select from the menu.");
+            System.out.println("0 - Exit Program\n" +
+                               "1 - Enter Student Information\n" +
+                               "2 - Enter Subject Information\n" +
+                               "3 - Access or Create File\n" +
+                               "4 - Output Student Report\n" + 
+                               "5 - Output Subject Report");
+            exit = keyboard.nextInt();
+            
+            //case for each possible input
+            switch(exit)
+            {
+                case 0: //EXIT
+                    System.out.println("EXITING PROGRAM...");
+                    break;
+                    
+                case 1: //student information
+                    System.out.println("You chose to Enter Student Information");
+                    //call student manual input
+                    classroom[0] = testStu; //test student as first value in Student array
+                    for (int i=1; i<SIZE; i++) //i = 0 is correct if you want to go from first value in array.
+                        {classroom[i] = createStudent();}
+                    break;
+                    
+                case 2: //class information
+                    System.out.println("You chose to Enter Subject Information");
+                    //call Subject manual input
+                    break;
+                    
+                case 3: //access file 
+                    System.out.println("You chose to Access or Create a File");
+                    //may get user to choose whether to input or output file contents
+                    //may choose whether input/output is for Student or Subject
+                    //make it so they can either create a file for i/o or use an existing file
+                    break;
+                    
+                case 4: //student report
+                    System.out.println("OUTPUTTING STUDENT REPORT...");
+                    //just output existing student classes in student array
+                    for (int i=0; i<SIZE; i++)
+                        {reportStudent(classroom[i]);}
+                    break;
+                    
+                case 5: //subject report
+                    System.out.println("OUTPUTTING SUBJECT REPORT...");
+                    //output existing Subject classes?
+                    break;
+                    
+                default: //default is essentially for invalid input
+                    System.out.println("INVALID INPUT. Please enter an integer from 0-5 (inclusive)");
+            }// end switch statement
+        }    
+        while(!(exit == 0)); //repeat menu until user enters '0'
+        
+        
     }// end main
+
+
+    
+    //Caleb -- Once again, very basic and should probably be replaced
+    static Student createStudent()
+    {//method that creates a basic student class
+        System.out.println("This method makes students, including names, ID, and grades for classes.");
+        Student madeStudent = new Student();
+        Scanner keyboard = new Scanner(System.in);
+        
+    System.out.println("Please enter the student's name");
+    String input = keyboard.nextLine();
+    madeStudent.setName(input);
+    
+    System.out.println("Please enter the student's ID number"); //maybe check and make sure its all numbers?
+    String inputID = keyboard.nextLine();
+    madeStudent.setID(inputID);
+    
+    System.out.println("Please enter the student's grade"); //this part might need a complete rework depending on how grades are stored
+    double inputGrade = keyboard.nextDouble();
+    madeStudent.setGrade(inputGrade);
+        
+        return madeStudent;
+    }//end createStudent
+    
+    static void reportStudent(Student someone)
+    {//takes a student object and outputs it nicely
+        System.out.println("STUDENT REPORT\n---------------");
+        System.out.println("Name:" + someone.getName());
+        System.out.println("ID:" + someone.getID());
+        System.out.println("Grade(s):" + someone.getGrade()); //just assume this will need to change
+        System.out.println("---------------");
+    }
     
 }// END OF CLASS
 
