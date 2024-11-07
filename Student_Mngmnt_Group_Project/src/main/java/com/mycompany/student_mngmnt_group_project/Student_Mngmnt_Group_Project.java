@@ -134,15 +134,14 @@ public class StudentManagementSystem
                     //just output existing student classes?
                     //every student sorted by grade... may have multiple instances of the same student for different subjects?
                     //need to sort this in the final edition. Sort by grade. <--------
+                    System.out.println("NAME             ID             CLASS          GRADE");
+                    System.out.println("----------------------------------------------------");
                      for (int i = 0; i < ClassSubjects.length; i++)
                     {
-                        System.out.println("For the Subject: " + ClassSubjects[i].getName() );
-                        
                         for (int j = 0; j < ClassSubjects[i].getStudents().size(); j++)
                         {//walk through the arraylist in each subject
                             //output a report for each student
-                            reportStudent(ClassSubjects[i].getStudents().get(j));
-                        
+                            reportStudent(ClassSubjects[i].getStudents().get(j),ClassSubjects[i].getName());
                         }
                     }
                     
@@ -190,13 +189,9 @@ public class StudentManagementSystem
     }//end createStudent
     
     //reports an individual student
-    static void reportStudent(Student someone)
+    static void reportStudent(Student someone, String className)
     {//takes a student object and outputs it nicely
-        System.out.println("STUDENT REPORT\n---------------");
-        System.out.println("Name:" + someone.getName());
-        System.out.println("ID:" + someone.getID());
-        System.out.println("Grade:" + someone.getGrade()); 
-        System.out.println("---------------");
+        System.out.printf("%-15s %-15s %-15s %-15s\n",someone.getName(),someone.getID(),className,someone.getGrade());
     }
     
 }// END OF CLASS
