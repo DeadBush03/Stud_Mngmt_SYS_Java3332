@@ -46,19 +46,19 @@ import java.io.*;
 
 public class StudentManagementSystem 
 {
+
     public static void main(String[] args) 
-    {           
+    {  
+                
         Scanner keyboard = new Scanner(System.in); //user input
         
-        //----- 
-        //Caleb -- Student and Subject classes for testing
+        //----- Student and Subject classes for testing
         //trying to figure out how Student and Subject interact
         System.out.println("How many students do you have?");
-        int SIZE = keyboard.nextInt(); //I have no validation because this is temporary
+        int SIZE = keyboard.nextInt(); //i have no validation because this is temporary
         
-        Student classroom[]= new Student[SIZE]; //student array, holds individual Student objects
-
-        //test student
+        Student classroom[]= new Student[SIZE]; //five students in array
+        
         Student testStu = new Student();
         testStu.setName("Test Student");
         testStu.setID("69420");
@@ -74,63 +74,78 @@ public class StudentManagementSystem
         do 
         {
             System.out.println("Enter a number to select from the menu.");
-            System.out.println("0 - Exit Program\n" +
-                               "1 - Enter Student Information\n" +
-                               "2 - Enter Subject Information\n" +
-                               "3 - Access or Create File\n" +
-                               "4 - Output Student Report\n" + 
-                               "5 - Output Subject Report");
+            System.out.println("0 - Exit Program\n1 - Alter Student Information\n"
+                    + "2 - Access or Create File\n3 - Output Student Averages Report\n"
+                    + "4 - Output Student Report\n5 - Output Subject Report");
             exit = keyboard.nextInt();
             
             //case for each possible input
             switch(exit)
             {
-                case 0: //EXIT
+                case 0:
                     System.out.println("EXITING PROGRAM...");
+                    
                     break;
                     
                 case 1: //student information
-                    System.out.println("You chose to Enter Student Information");
+                    System.out.println("You chose to Alter Student Information");
                     //call student manual input
+                    
+                    //Probably ask user if they want to add/remove a student (with validation in case the user tries anything impossible)
+                    
                     classroom[0] = testStu; //test student as first value in Student array
-                    for (int i=1; i<SIZE; i++) //i = 0 is correct if you want to go from first value in array.
-                        {classroom[i] = createStudent();}
+                    for (int i=1; i<SIZE; i++)
+                        {
+                        classroom[i] = createStudent();
+                        }
                     break;
                     
-                case 2: //class information
-                    System.out.println("You chose to Enter Subject Information");
-                    //call Subject manual input
-                    break;
-                    
-                case 3: //access file 
+                case 2: //access file
                     System.out.println("You chose to Access or Create a File");
                     //may get user to choose whether to input or output file contents
-                    //may choose whether input/output is for Student or Subject
+                    //file input can be for one or multiple students, have input validation to make sure a file doesn't have nonsense
+                    
+                    //file output just puts current students into a file, such that it can be read later.
                     //make it so they can either create a file for i/o or use an existing file
                     break;
                     
-                case 4: //student report
-                    System.out.println("OUTPUTTING STUDENT REPORT...");
-                    //just output existing student classes in student array
+                case 3: //Output AVERAGES
+                    System.out.println("OUTPUTTING AVERAGE STUDENT GRADES...");
+                    //output the average grades for each student
+                    
+                    //this depends heavily on how grades are stored
+                    //does not necessarily need to be sorted though
+                    break;
+                    
+                case 4: //student report sorted by grades
+                    System.out.println("OUTPUTTING ALL STUDENT REPORTS...");
+                    //just output existing student classes?
+                    //every student sorted by grade... may have multiple instances of the same student for different subjects?
+                    //need to sort this in the final edition. Sort by grade. <--------
                     for (int i=0; i<SIZE; i++)
-                        {reportStudent(classroom[i]);}
+                        {
+                        reportStudent(classroom[i]);
+                        }
+                    
                     break;
                     
                 case 5: //subject report
                     System.out.println("OUTPUTTING SUBJECT REPORT...");
-                    //output existing Subject classes?
+                    //output existing Subject class
+                    //Highest and Lowest grades for a specific subject
+                    //have user pick from possible subjects
+                    
+                    //could all subjects be premade?
                     break;
                     
                 default: //default is essentially for invalid input
                     System.out.println("INVALID INPUT. Please enter an integer from 0-5 (inclusive)");
             }// end switch statement
         }    
-        while(!(exit == 0)); //repeat menu until user enters '0'
+        while(!(exit == 0)); //repeat this until user enters '0'
         
         
     }// end main
-
-
     
     //Caleb -- Once again, very basic and should probably be replaced
     static Student createStudent()
@@ -166,6 +181,7 @@ public class StudentManagementSystem
 }// END OF CLASS
 
 //Caleb --Change this as you see fit, it's very basic
+//Student may be an aggregate of the 'Subject' class, because 'Subject' can have many students within it
 class Student
 {//this class holds information about a student
     //attributes: ID, name, grades, etc.)
