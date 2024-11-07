@@ -40,6 +40,7 @@ Remember to ensure error handling and input validation
 //scanner and file manipulation
 import java.util.Scanner;
 import java.io.*;
+import java.util.ArrayList;
 
 //Please remember to put your name before the class/method you're working on
 //this is to prevent people from accidentally working on the same thing
@@ -53,16 +54,20 @@ public class StudentManagementSystem
         Scanner keyboard = new Scanner(System.in); //user input
         
         //----- Student and Subject classes for testing
-        //trying to figure out how Student and Subject interact
-        System.out.println("How many students do you have?");
-        int SIZE = keyboard.nextInt(); //i have no validation because this is temporary
+
+        //subjects array
+        final int numClasses = 2; //the fixed number of classes we have
         
-        Student classroom[]= new Student[SIZE]; //five students in array
+        Subject ClassSubjects[] = new Subject[numClasses]; //number of subjects
+        //basic MATH subject
+        ClassSubjects[0] = new Subject();
+        ClassSubjects[0].setID("1401");
+        ClassSubjects[0].setName("MATH");
+        //basic ENGL subject
+        ClassSubjects[1] = new Subject();
+        ClassSubjects[1].setID("1201");
+        ClassSubjects[1].setName("ENGL");
         
-        Student testStu = new Student();
-        testStu.setName("Test Student");
-        testStu.setID("69420");
-        testStu.setGrade(100.00);
         
         //-----
         
@@ -92,12 +97,19 @@ public class StudentManagementSystem
                     //call student manual input
                     
                     //Probably ask user if they want to add/remove a student (with validation in case the user tries anything impossible)
+                    //add
+                    System.out.println("What subject do you want to add one student to?");
+                    for (int x = 0; x < ClassSubjects.length; x++)
+                    {//present the possible choices of subject
+                        System.out.println("Enter " + x + ":" + ClassSubjects[x].getName() );
+                    }
+                    //get the index directly from the user
+                    //validate later
+                    int userInputSubject = keyboard.nextInt();
                     
-                    classroom[0] = testStu; //test student as first value in Student array
-                    for (int i=1; i<SIZE; i++)
-                        {
-                        classroom[i] = createStudent();
-                        }
+                    System.out.println("For the Subject: " + ClassSubjects[userInputSubject].getName());
+                    ClassSubjects[userInputSubject].addStudent(createStudent());
+                    
                     break;
                     
                 case 2: //access file
@@ -122,18 +134,25 @@ public class StudentManagementSystem
                     //just output existing student classes?
                     //every student sorted by grade... may have multiple instances of the same student for different subjects?
                     //need to sort this in the final edition. Sort by grade. <--------
-                    for (int i=0; i<SIZE; i++)
-                        {
-                        reportStudent(classroom[i]);
+                     for (int i = 0; i < ClassSubjects.length; i++)
+                    {
+                        System.out.println("For the Subject: " + ClassSubjects[i].getName() );
+                        
+                        for (int j = 0; j < ClassSubjects[i].getStudents().size(); j++)
+                        {//walk through the arraylist in each subject
+                            //output a report for each student
+                            reportStudent(ClassSubjects[i].getStudents().get(j));
+                        
                         }
+                    }
                     
                     break;
                     
                 case 5: //subject report
                     System.out.println("OUTPUTTING SUBJECT REPORT...");
-                    //output existing Subject class
+                    //output an existing Subject class
                     //Highest and Lowest grades for a specific subject
-                    //have user pick from possible subjects
+                    //only output that subject
                     
                     //could all subjects be premade?
                     break;
@@ -148,6 +167,7 @@ public class StudentManagementSystem
     }// end main
     
     //Caleb -- Once again, very basic and should probably be replaced
+    //just need input validation and error handling
     static Student createStudent()
     {//method that creates a basic student class
         System.out.println("This method makes students, including names, ID, and grades for classes.");
@@ -169,12 +189,13 @@ public class StudentManagementSystem
         return madeStudent;
     }//end createStudent
     
+    //reports an individual student
     static void reportStudent(Student someone)
     {//takes a student object and outputs it nicely
         System.out.println("STUDENT REPORT\n---------------");
         System.out.println("Name:" + someone.getName());
         System.out.println("ID:" + someone.getID());
-        System.out.println("Grade(s):" + someone.getGrade()); //just assume this will need to change
+        System.out.println("Grade:" + someone.getGrade()); 
         System.out.println("---------------");
     }
     
@@ -187,7 +208,7 @@ class Student
     //attributes: ID, name, grades, etc.)
     private String ID = "000000"; //id won't be manipulated, it's a string
     private String Name = "Nameless"; //default name for a student
-    //grades may need to be an array, whose size is the number of 'Subject' classes...
+    //single grade for an instance of a student
     private double Grades;
 
      //accessors
@@ -214,22 +235,25 @@ class Subject
     
     private String ClassName = "No Subject"; //no initial subject
     private String ClassID = "0000"; //no class id
-    private double ClassGrade = -1.0; //nonsense initial value
+    //each student will have a single grade in them for an instance of the subject.
+    private ArrayList<Student> ClassStudents = new ArrayList<Student>(); //an array list of students that can be altered for each subject
 
     //accessors
     public String getName()
     {return ClassName;}
     public String getID()
     {return ClassID;}
-    public double getGrade()
-    {return ClassGrade;}
+    public ArrayList<Student> getStudents() //return the arraylist of students
+    {return ClassStudents;}
 
     //mutators
     public void setName(String nm)
     {ClassName = nm;}
     public void setID(String id)
     {ClassID = id;}
-    public void setGrade(double gr)
-    {ClassGrade = gr;}
+    public void addStudent(Student somebody) //add a student to the arraylist
+    {ClassStudents.add(somebody);}
+    public void removeStudent(int index) //remove a specific student?
+    {ClassStudents.remove(index);} //send an index after you find student index, to remove
 
 }
