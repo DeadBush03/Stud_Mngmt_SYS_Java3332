@@ -56,7 +56,7 @@ public class StudentManagementSystem
         //----- Student and Subject classes for testing
 
         //subjects array
-        final int numClasses = 2; //the fixed number of classes we have
+        final int numClasses = 4; //the fixed number of classes we have
         
         Subject ClassSubjects[] = new Subject[numClasses]; //number of subjects
         //basic MATH subject
@@ -67,6 +67,15 @@ public class StudentManagementSystem
         ClassSubjects[1] = new Subject();
         ClassSubjects[1].setID("1201");
         ClassSubjects[1].setName("ENGL");
+        //basic COSC subject
+        ClassSubjects[2] = new Subject();
+        ClassSubjects[2].setID("2346");
+        ClassSubjects[2].setName("COSC");
+        //basic HIST subject
+        ClassSubjects[3] = new Subject();
+        ClassSubjects[1].setID("1302");
+        ClassSubjects[1].setName("HIST");
+        
         
         
         //-----
