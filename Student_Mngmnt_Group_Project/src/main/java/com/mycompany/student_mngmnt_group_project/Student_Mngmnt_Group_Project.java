@@ -110,11 +110,17 @@ public class StudentManagementSystem
                     System.out.println("What subject do you want to add one student to?");
                     for (int x = 0; x < ClassSubjects.length; x++)
                     {//present the possible choices of subject
-                        System.out.println("Enter " + x + ":" + ClassSubjects[x].getName() );
+                        System.out.println("Enter " + x + ": " + ClassSubjects[x].getName() );
                     }
                     //get the index directly from the user
-                    //validate later
                     int userInputSubject = keyboard.nextInt();
+                    //validation
+                    while (userInputSubject < 0 || userInputSubject > ClassSubjects.length)
+                        {//if user input is invalid
+                        System.out.println("Your input was invalid, re-enter your choice: ");
+                        userInputSubject = keyboard.nextInt();
+                        } //keep re-taking input until they are within a valid range
+                    
                     
                     System.out.println("For the Subject: " + ClassSubjects[userInputSubject].getName());
                     ClassSubjects[userInputSubject].addStudent(createStudent());
@@ -133,24 +139,27 @@ public class StudentManagementSystem
                 case 3: //Output AVERAGES
                     System.out.println("OUTPUTTING AVERAGE STUDENT GRADES...");
                     //output the average grades for each student
+                    //have user choose the ID of a student to find the average grade for
                     
-                    //this depends heavily on how grades are stored
-                    //does not necessarily need to be sorted though
+                    //search through all Subjects, and find every student with the same ID. Sum grades, and divide by number of grades.
+                    
                     break;
                     
                 case 4: //student report sorted by grades
                     System.out.println("OUTPUTTING ALL STUDENT REPORTS...");
                     //just output existing student classes?
-                    //every student sorted by grade... may have multiple instances of the same student for different subjects?
-                    //need to sort this in the final edition. Sort by grade. <--------
+                    //every student sorted by grade... may have multiple instances of the same student for different subjects
                     System.out.println("NAME             ID             CLASS          GRADE");
                     System.out.println("----------------------------------------------------");
+
                      for (int i = 0; i < ClassSubjects.length; i++)
                     {
+                        ClassSubjects[i].sortStudent(); //sort a class by grade, then output each student in the class
                         for (int j = 0; j < ClassSubjects[i].getStudents().size(); j++)
                         {//walk through the arraylist in each subject
                             //output a report for each student
                             reportStudent(ClassSubjects[i].getStudents().get(j),ClassSubjects[i].getName());
+                        
                         }
                     }
                     
@@ -159,10 +168,30 @@ public class StudentManagementSystem
                 case 5: //subject report
                     System.out.println("OUTPUTTING SUBJECT REPORT...");
                     //output an existing Subject class
-                    //Highest and Lowest grades for a specific subject
-                    //only output that subject
+                    //only output that subject's students with the highest and lowest grades, along with the class' overall average grade
+                    System.out.println("What subject do you want to report?");
+                    for (int x = 0; x < ClassSubjects.length; x++)
+                    {//present the possible choices of subject
+                        System.out.println("Enter " + x + ": " + ClassSubjects[x].getName() );
+                    }
+                    //get the index directly from the user
+                    userInputSubject = keyboard.nextInt();
+                    //validation
+                    while (userInputSubject < 0 || userInputSubject > ClassSubjects.length)
+                        {//if user input is invalid
+                        System.out.println("Your input was invalid, re-enter your choice: ");
+                        userInputSubject = keyboard.nextInt();
+                        } //keep re-taking input until they are within a valid range
                     
-                    //could all subjects be premade?
+                    //output the highest and lowest students (by grade)
+                    //and average grade in the class
+                    System.out.println("For the Subject: " + ClassSubjects[userInputSubject].getName());
+                    System.out.println("The highest grade in the class: ");
+                    reportStudent(ClassSubjects[userInputSubject].getHighestStudent(), ClassSubjects[userInputSubject].getName());
+                    System.out.println("The lowest grade in the class: ");
+                    reportStudent(ClassSubjects[userInputSubject].getLowestStudent(), ClassSubjects[userInputSubject].getName());
+                    System.out.println("The average grade of the class is: " + ClassSubjects[userInputSubject].getAverageGrade());
+                    
                     break;
                     
                 default: //default is essentially for invalid input
@@ -205,40 +234,66 @@ public class StudentManagementSystem
     
 }// END OF CLASS
 
-//Caleb --Change this as you see fit, it's very basic
+//Caleb
 //Student may be an aggregate of the 'Subject' class, because 'Subject' can have many students within it
 class Student
 {//this class holds information about a student
-    //attributes: ID, name, grades, etc.)
-    private String ID = "000000"; //id won't be manipulated, it's a string
-    private String Name = "Nameless"; //default name for a student
+    //attributes: ID, name, grades, etc.
+    private String ID;   //id won't be manipulated, it's a string
+    private String Name; //default name for a student
     //single grade for an instance of a student
-    private double Grades;
+    private double Grade;
 
-     //accessors
+     //accessors//
     public String getName()
     {return Name;}
     public String getID()
     {return ID;}
     public double getGrade() //remember this may need to be an array
-    {return Grades;}
+    {return Grade;}
 
-    //mutators
+    //mutators//
     public void setName(String N)
     {Name = N;}
     public void setID(String stuId)
     {ID = stuId;}
-    public void setGrade(double grade) //this may also need to be an array, in which case need for loop to copy values
-    {Grades = grade; }
+    public void setGrade(double g) 
+    {Grade = g; }
+    
+    
+    //constructors//
+    public Student(String nm,String id,double grd)
+    {
+        this.Name = nm;
+        this.ID = id;
+        this.Grade = grd;
+    }
+    
+    //empty constructor
+    public Student()
+    {
+        this.Name = "Nameless";
+        this.ID = "000000";
+        this.Grade = 0.0;
+    }
+
+    // Copy Constructor
+    public Student(Student other) 
+    {
+        this.Name = other.Name;
+        this.ID = other.ID;
+        this.Grade = other.Grade;
+    }
+    
 }
 
-//Caleb --Change this as you see fit, it's very basic
+//Caleb 
 class Subject
 {//this class stores information on a subject like 'Math', 'English', etc
     //attributes are name, grade, etc.
     
     private String ClassName = "No Subject"; //no initial subject
-    private String ClassID = "0000"; //no class id
+    private String ClassID = "0000";        //no class id
     //each student will have a single grade in them for an instance of the subject.
     private ArrayList<Student> ClassStudents = new ArrayList<Student>(); //an array list of students that can be altered for each subject
 
@@ -249,6 +304,55 @@ class Subject
     {return ClassID;}
     public ArrayList<Student> getStudents() //return the arraylist of students
     {return ClassStudents;}
+    
+    public double getAverageGrade()
+    {// get the average grade of the entire class
+        double gradeAvg;        //average we'll return
+        double totalGrade = 0;  //running total for grade
+        int totalNum = 0;       //number of students (to find average)
+        
+        //go through each student's grade in student arraylist
+        for(int i = 0; i < ClassStudents.size(); i++ )
+        {
+        totalGrade += ClassStudents.get(i).getGrade() ;
+        totalNum += 1;
+        }
+        
+        gradeAvg = totalGrade/totalNum ;
+        return gradeAvg;
+    }
+    
+    public Student getHighestStudent()
+    {//get student with highest grade in the class
+        double hiGrade = ClassStudents.get(0).getGrade() ; //set to first value in array
+        Student hiStudent = new Student(ClassStudents.get(0));
+        //go through each student's grade in student arraylist
+        for(int i = 1; i < ClassStudents.size(); i++ )
+        {
+            if (hiGrade < ClassStudents.get(i).getGrade()) //find the highest grade
+                {
+                    hiGrade = ClassStudents.get(i).getGrade();
+                    hiStudent = new Student(ClassStudents.get(i)); //reconstruct
+                }
+        } 
+        return hiStudent; //return the Student with the highest grade
+    }
+    
+    public Student getLowestStudent()
+    {//get the student with the lowest grade in the class
+     double loGrade = ClassStudents.get(0).getGrade() ; //set to first value in array
+        Student loStudent = new Student(ClassStudents.get(0));
+        //go through each student's grade in student arraylist
+        for(int i = 1; i < ClassStudents.size(); i++ )
+        {
+            if (loGrade > ClassStudents.get(i).getGrade()) //find the lowest grade
+                {
+                    loGrade = ClassStudents.get(i).getGrade();
+                    loStudent = new Student(ClassStudents.get(i)); //reconstruct
+                }
+        } 
+        return loStudent; //return the Student with the lowest grade
+    }
 
     //mutators
     public void setName(String nm)
@@ -259,5 +363,30 @@ class Subject
     {ClassStudents.add(somebody);}
     public void removeStudent(int index) //remove a specific student?
     {ClassStudents.remove(index);} //send an index after you find student index, to remove
+    
+    //sorting the arraylist of students by grade
+    public void sortStudent()
+    {//selection sort
+        int SIZE = ClassStudents.size();
+        
+        for (int i = 0; i < SIZE-1; i++) //SIZE-1 so as to not encounter errors
+        {
+        int min_idx = i;
 
-}
+            // Iterate through the unsorted portion
+            // to find the actual minimum
+            for (int j = i + 1; j < SIZE; j++) 
+                {
+                if (ClassStudents.get(j).getGrade() < ClassStudents.get(min_idx).getGrade() ) //compare the grades of the students
+                    {//if next smallest value is found at j...
+                    min_idx = j;
+                    }
+                }
+            Student temp = new Student(ClassStudents.get(i)); //get the current value as a temporary value
+            ClassStudents.set(i, ClassStudents.get(min_idx) ); //set current to minimum
+           ClassStudents.set(min_idx, temp);  //set old minimum to temp
+        }    
+    
+    }//end sort student
+
+}//end Subject
