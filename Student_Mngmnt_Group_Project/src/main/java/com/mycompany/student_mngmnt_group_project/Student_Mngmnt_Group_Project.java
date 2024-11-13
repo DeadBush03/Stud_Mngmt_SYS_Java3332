@@ -76,7 +76,11 @@ public class StudentManagementSystem
         ClassSubjects[1].setID("1302");
         ClassSubjects[1].setName("HIST");
         
-        
+        for(int i = 0; i < ClassSubjects.length; i++)
+            {//make a 'default student' to prevent errors
+            Student nobody = new Student();
+            ClassSubjects[i].addStudent(nobody);
+            }
         
         //-----
         
@@ -185,6 +189,7 @@ public class StudentManagementSystem
                     
                     //output the highest and lowest students (by grade)
                     //and average grade in the class
+                    
                     System.out.println("For the Subject: " + ClassSubjects[userInputSubject].getName());
                     System.out.println("The highest grade in the class: ");
                     reportStudent(ClassSubjects[userInputSubject].getHighestStudent(), ClassSubjects[userInputSubject].getName());
@@ -272,8 +277,8 @@ class Student
     //empty constructor
     public Student()
     {
-        this.Name = "Nameless";
-        this.ID = "000000";
+        this.Name = "Class Empty";
+        this.ID = "No Student";
         this.Grade = 0.0;
     }
 
