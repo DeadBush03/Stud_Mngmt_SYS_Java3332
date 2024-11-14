@@ -93,11 +93,11 @@ public class StudentManagementSystem
         {
             System.out.println("Enter a number to select from the menu.");
             System.out.println("0 - Exit Program\n" + 
-							   "1 - Alter Student Information\n" +
-              			       "2 - Access or Create File\n" + 
-							   "3 - Output Student Averages Report\n" +
-            				   "4 - Output Student Report\n"+
-							   "5 - Output Subject Report");
+				"1 - Alter Student Information\n" +
+              			"2 - Access or Create File\n" + 
+				"3 - Output Student Averages Report\n" +
+            			"4 - Output Student Report\n"+
+				"5 - Output Subject Report");
             exit = keyboard.nextInt();
             
             //case for each possible input
@@ -308,7 +308,7 @@ class Subject
     //attributes are name, grade, etc.
     
     private String ClassName = "No Subject";	//no initial subject
-    private String ClassID = "0000";    		//no class id
+    private String ClassID = "0000";    	//no class id
     //each student will have a single grade in them for an instance of the subject.
 	//an array list of students that can be altered for each subject
     private ArrayList<Student> ClassStudents = new ArrayList<Student>(); 
@@ -378,7 +378,7 @@ class Subject
     public void addStudent(Student somebody) 	//add a student to the arraylist
     {ClassStudents.add(somebody);}
     public void removeStudent(int index) 		//remove a specific student?
-    {ClassStudents.remove(index);} 				//send an index after you find student index, to remove
+    {ClassStudents.remove(index);} 			//send an index after you find student index, to remove
     
     //sorting the arraylist of students by grade
     public void sortStudent()
@@ -400,7 +400,7 @@ class Subject
                 }
             Student temp = new Student(ClassStudents.get(i)); 		//get the current value as a temporary value
             ClassStudents.set(i, ClassStudents.get(min_idx) );		//set current to minimum
-           ClassStudents.set(min_idx, temp);  						//set old minimum to temp
+           ClassStudents.set(min_idx, temp);  				//set old minimum to temp
         }    
     
     }//end sort student
