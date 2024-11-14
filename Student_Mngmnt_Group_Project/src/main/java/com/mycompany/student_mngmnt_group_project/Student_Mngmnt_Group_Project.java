@@ -73,8 +73,8 @@ public class StudentManagementSystem
         ClassSubjects[2].setName("COSC");
         //basic HIST subject
         ClassSubjects[3] = new Subject();
-        ClassSubjects[1].setID("1302");
-        ClassSubjects[1].setName("HIST");
+        ClassSubjects[3].setID("1302");
+        ClassSubjects[3].setName("HIST");
         
         for(int i = 0; i < ClassSubjects.length; i++)
             {//make a 'default student' to prevent errors
@@ -82,7 +82,7 @@ public class StudentManagementSystem
             ClassSubjects[i].addStudent(nobody);
             }
         
-        //-----
+        //----- end testing
         
         System.out.println("This program takes information from the user about "
                 + "\nstudents, classes, and grades and outputs reports from user input.");
@@ -92,9 +92,12 @@ public class StudentManagementSystem
         do 
         {
             System.out.println("Enter a number to select from the menu.");
-            System.out.println("0 - Exit Program\n1 - Alter Student Information\n"
-                    + "2 - Access or Create File\n3 - Output Student Averages Report\n"
-                    + "4 - Output Student Report\n5 - Output Subject Report");
+            System.out.println("0 - Exit Program\n" + 
+							   "1 - Alter Student Information\n" +
+              			       "2 - Access or Create File\n" + 
+							   "3 - Output Student Averages Report\n" +
+            				   "4 - Output Student Report\n"+
+							   "5 - Output Subject Report");
             exit = keyboard.nextInt();
             
             //case for each possible input
@@ -158,7 +161,7 @@ public class StudentManagementSystem
 
                      for (int i = 0; i < ClassSubjects.length; i++)
                     {
-                        ClassSubjects[i].sortStudent(); //sort a class by grade, then output each student in the class
+                        ClassSubjects[i].sortStudent();	 //sort a class by grade, then output each student in the class
                         for (int j = 0; j < ClassSubjects[i].getStudents().size(); j++)
                         {//walk through the arraylist in each subject
                             //output a report for each student
@@ -189,7 +192,7 @@ public class StudentManagementSystem
                     
                     //output the highest and lowest students (by grade)
                     //and average grade in the class
-                    
+                    //this may seem complicated, but we just get the student and output a report
                     System.out.println("For the Subject: " + ClassSubjects[userInputSubject].getName());
                     System.out.println("The highest grade in the class: ");
                     reportStudent(ClassSubjects[userInputSubject].getHighestStudent(), ClassSubjects[userInputSubject].getName());
@@ -208,8 +211,7 @@ public class StudentManagementSystem
         
     }// end main
     
-    //Caleb -- Once again, very basic and should probably be replaced
-    //just need input validation and error handling
+    //Caleb -- Probably good enough. Maybe make formatting better if anything
     static Student createStudent()
     {//method that creates a basic student class
         System.out.println("This method makes students, including names, ID, and grades for classes.");
@@ -220,12 +222,20 @@ public class StudentManagementSystem
     String input = keyboard.nextLine();
     madeStudent.setName(input);
     
-    System.out.println("Please enter the student's ID number"); //maybe check and make sure its all numbers?
+    System.out.println("Please enter the student's ID number"); //this will probably not need validation as ID can be numbers and letters...
     String inputID = keyboard.nextLine();
     madeStudent.setID(inputID);
     
-    System.out.println("Please enter the student's grade"); //this part might need a complete rework depending on how grades are stored
+    System.out.println("Please enter the student's grade"); 
     double inputGrade = keyboard.nextDouble();
+        //validation
+    while (inputGrade < 0 || inputGrade > 100)
+    {
+        System.out.print("INVALID INPUT." + 
+        "\nPlease enter a valid grade (0-100): ");
+        inputGrade = keyboard.nextDouble();
+        //just repeat until the user enters a valid input
+    }
     madeStudent.setGrade(inputGrade);
         
         return madeStudent;
@@ -244,8 +254,8 @@ public class StudentManagementSystem
 class Student
 {//this class holds information about a student
     //attributes: ID, name, grades, etc.
-    private String ID;   //id won't be manipulated, it's a string
-    private String Name; //default name for a student
+    private String ID;   	//id won't be manipulated, it's a string
+    private String Name; 	//default name for a student
     //single grade for an instance of a student
     private double Grade;
 
@@ -254,7 +264,7 @@ class Student
     {return Name;}
     public String getID()
     {return ID;}
-    public double getGrade() //remember this may need to be an array
+    public double getGrade()
     {return Grade;}
 
     //mutators//
@@ -297,17 +307,18 @@ class Subject
 {//this class stores information on a subject like 'Math', 'English', etc
     //attributes are name, grade, etc.
     
-    private String ClassName = "No Subject"; //no initial subject
-    private String ClassID = "0000";        //no class id
+    private String ClassName = "No Subject";	//no initial subject
+    private String ClassID = "0000";    		//no class id
     //each student will have a single grade in them for an instance of the subject.
-    private ArrayList<Student> ClassStudents = new ArrayList<Student>(); //an array list of students that can be altered for each subject
+	//an array list of students that can be altered for each subject
+    private ArrayList<Student> ClassStudents = new ArrayList<Student>(); 
 
     //accessors
     public String getName()
     {return ClassName;}
     public String getID()
     {return ClassID;}
-    public ArrayList<Student> getStudents() //return the arraylist of students
+    public ArrayList<Student> getStudents() 
     {return ClassStudents;}
     
     public double getAverageGrade()
@@ -345,12 +356,12 @@ class Subject
     
     public Student getLowestStudent()
     {//get the student with the lowest grade in the class
-     double loGrade = ClassStudents.get(0).getGrade() ; //set to first value in array
+     double loGrade = ClassStudents.get(0).getGrade();		 //set to first value in array
         Student loStudent = new Student(ClassStudents.get(0));
         //go through each student's grade in student arraylist
         for(int i = 1; i < ClassStudents.size(); i++ )
         {
-            if (loGrade > ClassStudents.get(i).getGrade()) //find the lowest grade
+            if (loGrade > ClassStudents.get(i).getGrade())	 //find the lowest grade
                 {
                     loGrade = ClassStudents.get(i).getGrade();
                     loStudent = new Student(ClassStudents.get(i)); //reconstruct
@@ -364,10 +375,10 @@ class Subject
     {ClassName = nm;}
     public void setID(String id)
     {ClassID = id;}
-    public void addStudent(Student somebody) //add a student to the arraylist
+    public void addStudent(Student somebody) 	//add a student to the arraylist
     {ClassStudents.add(somebody);}
-    public void removeStudent(int index) //remove a specific student?
-    {ClassStudents.remove(index);} //send an index after you find student index, to remove
+    public void removeStudent(int index) 		//remove a specific student?
+    {ClassStudents.remove(index);} 				//send an index after you find student index, to remove
     
     //sorting the arraylist of students by grade
     public void sortStudent()
@@ -387,9 +398,9 @@ class Subject
                     min_idx = j;
                     }
                 }
-            Student temp = new Student(ClassStudents.get(i)); //get the current value as a temporary value
-            ClassStudents.set(i, ClassStudents.get(min_idx) ); //set current to minimum
-           ClassStudents.set(min_idx, temp);  //set old minimum to temp
+            Student temp = new Student(ClassStudents.get(i)); 		//get the current value as a temporary value
+            ClassStudents.set(i, ClassStudents.get(min_idx) );		//set current to minimum
+           ClassStudents.set(min_idx, temp);  						//set old minimum to temp
         }    
     
     }//end sort student
