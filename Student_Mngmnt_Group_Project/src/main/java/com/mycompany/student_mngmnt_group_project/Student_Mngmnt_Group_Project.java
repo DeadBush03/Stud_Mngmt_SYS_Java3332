@@ -52,6 +52,12 @@ public class StudentManagementSystem
     {  
                 
         Scanner keyboard = new Scanner(System.in); //user input
+	//variable to hold name of file to save to or import from
+	    //can be used to allow user to enter name of file if we decide to do that
+	String fileName;
+	//int variable to use for situations in which user needs to enter an input outside of Main Menu. made so that we can use a variable that doesnt
+	    //interfere with exit variable, etc.
+	int tempInput;
         
         //----- Student and Subject classes for testing
 
@@ -134,9 +140,47 @@ public class StudentManagementSystem
                     
                     break;
                     
-                case 2: //access file
-                    System.out.println("You chose to Access or Create a File");
-                    //may get user to choose whether to input or output file contents
+                case 2: //outputting to a file or importing from a file
+                    try{
+                    System.out.println("You have chosen to Save to or Import from a Text File.");
+                    //Asking user if they want to back out of this option, save to a file, or import from a file
+                    System.out.println("Do you want to 0)Exit this option, 1)Import information from a .txt file, or 2)Save to a .txt file?");
+                    System.out.print("Please enter the number of the option you want to choose: ");
+                    tempInput = keyboard.nextInt();
+                    if(tempInput == 0){
+                        System.out.println("Exit input recognized. Returning to Main Menu...");
+                        break;
+                    }
+
+		    //option to import data from a file, not done with this one yet. Will complete output before this. - Jack
+                    else if (tempInput == 1){
+                        //POTENTIAL: maybe look into having the user name the file they are importing from? -Jack
+                        fileName = "StudentInfo.txt";
+                        System.out.println("You have chosen to import data from file, 'StudentInfo.txt'.");
+                        //Make File class object to import data from
+                        File importFile = new File("StudentInfo.txt");
+                        Scanner inputFile = new Scanner(importFile);
+                        //include a try-catch statement here to make sure file is valid
+                        System.out.println("The file you chose was valid! Importing data now...");
+                        //use Scanner object to read data from each line, or something, in txt file
+                            //once using Scanner, assign that line to an object/field corresponding to what that line is for.
+                                // ^^ Will require the txt file to have its info formatted/saved in a certain way, probably in way not user friendly?
+                                //Could look into making way info is saved into txt file more user friendly and still having import function work.
+                        break;
+                    } 
+
+		    //option to save all student data to a text file. Mostly finished, need to fix saveInfo function, but that's about it. Maybe polish. - Jack
+                    else if (tempInput == 2){
+                        //POTENTIAL: maybe look into having the user name the file they want to create and save to? - Jack
+                        fileName = "StudentInfo.txt";
+                        System.out.println("You have chosen to save your student information to file, 'StudentInfo.txt'.");
+                        saveInfo(fileName);
+                    }
+                    }
+                    //catch for if file is not found for either save option or import option
+                    catch(FileNotFoundException e){
+                        System.out.println("File not found: " + e.getMessage());
+                    }
                     //file input can be for one or multiple students, have input validation to make sure a file doesn't have nonsense
                     
                     //file output just puts current students into a file, such that it can be read later.
@@ -210,7 +254,24 @@ public class StudentManagementSystem
         
         
     }// end main
-    
+
+    //Function to save all student information to a text file.
+    //THIS FUNCTION CANNOT ACCESS ClassSubjects[i], WILL HAVE TO MOVE IT TO SOMEWHERE IT CAN ACCESS THEM - Jack
+    static void saveInfo(String FileN){
+        PrintWriter outputFile = new PrintWriter(FileN);
+        for (int i = 0; i < ClassSubjects.length; i++){
+            ClassSubjects[i].sortStudent();
+            for (int j = 0; j < ClassSubjects[i].getStudents().size(); j++){
+                outputFile.println(ClassSubjects[i].getName());
+                outputFile.println(ClassSubjects[i].getStudents().get(j).getName());
+                outputFile.println(ClassSubjects[i].getStudents().get(j).getID());
+                outputFile.println(ClassSubjects[i].getStudents().get(j).getGrade());
+                outputFile.println();
+            }
+        }
+        outputFile.close();
+    }
+	
     //Caleb -- Probably good enough. Maybe make formatting better if anything
     static Student createStudent()
     {//method that creates a basic student class
