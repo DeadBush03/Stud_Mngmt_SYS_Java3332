@@ -144,7 +144,7 @@ public class StudentManagementSystem
                     break;
                     
                 case 3: //Output AVERAGES
-                    System.out.println("OUTPUTTING AVERAGE STUDENT GRADES...");
+                    System.out.println("OUTPUTTING AVERAGE OF A STUDENT'S GRADE...");
                     //output the average grades for each student
                     //have user choose the ID of a student to find the average grade for
                     
