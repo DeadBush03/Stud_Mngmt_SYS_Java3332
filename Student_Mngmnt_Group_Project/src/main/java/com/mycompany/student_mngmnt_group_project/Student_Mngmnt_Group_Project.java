@@ -17,20 +17,12 @@ including adding students, tracking grades,
 calculating averages, and generating reports (highest/lowest grades),
 and File input/output for loading/saving information respectively
 -----
-The system should display a menu with options for users to select operations 
-like adding, removing, or viewing student details
------
-At LEAST three key classes:
-- `Student` (attributes: ID, name, grades, etc.)
-- `Subject` (attributes: name, grade, etc.)
-- `StudentManagementSystem` (handling all system operations)
-
 - Apply the principles of Encapsulation to ensure data hiding.
 - Use Inheritance and Polymorphism where appropriate
 
 REPORTS:
 The system should generate reports such as
-- Average grade for each student
+- Average grade for a specific student
 - Highest and lowest grades for a specific subject
 - A list of students sorted by grade
 
@@ -47,7 +39,6 @@ import java.util.ArrayList;
 
 public class StudentManagementSystem 
 {
-
     public static void main(String[] args) 
     {  
                 
@@ -82,16 +73,8 @@ public class StudentManagementSystem
         ClassSubjects[3].setID("1302");
         ClassSubjects[3].setName("HIST");
         
-        for(int i = 0; i < ClassSubjects.length; i++)
-            {//make a 'default student' to prevent errors
-            Student nobody = new Student();
-            ClassSubjects[i].addStudent(nobody);
-            }
-        
         //----- end testing
-        
-        System.out.println("This program takes information from the user about "
-                + "\nstudents, classes, and grades and outputs reports from user input.");
+
         System.out.println("STUDENT MANAGEMENT SYSTEM");
 
         int exit = -1; //exit when user says to
@@ -125,15 +108,18 @@ public class StudentManagementSystem
                     {//present the possible choices of subject
                         System.out.println("Enter " + x + ": " + ClassSubjects[x].getName() );
                     }
+			System.out.println("Or Enter -1 to exit");
                     //get the index directly from the user
                     int userInputSubject = keyboard.nextInt();
                     //validation
-                    while (userInputSubject < 0 || userInputSubject > ClassSubjects.length)
+                    while (userInputSubject < -1 || userInputSubject > ClassSubjects.length)
                         {//if user input is invalid
                         System.out.println("Your input was invalid, re-enter your choice: ");
                         userInputSubject = keyboard.nextInt();
                         } //keep re-taking input until they are within a valid range
-                    
+
+		    if (userInputSubject == -1) //exit only if user says to
+                    {break;}
                     
                     System.out.println("For the Subject: " + ClassSubjects[userInputSubject].getName());
                     ClassSubjects[userInputSubject].addStudent(createStudent());
@@ -141,46 +127,50 @@ public class StudentManagementSystem
                     break;
                     
                 case 2: //outputting to a file or importing from a file
-                    try{
-                    System.out.println("You have chosen to Save to or Import from a Text File.");
-                    //Asking user if they want to back out of this option, save to a file, or import from a file
-                    System.out.println("Do you want to 0)Exit this option, 1)Import information from a .txt file, or 2)Save to a .txt file?");
-                    System.out.print("Please enter the number of the option you want to choose: ");
-                    tempInput = keyboard.nextInt();
-                    if(tempInput == 0){
-                        System.out.println("Exit input recognized. Returning to Main Menu...");
-                        break;
-                    }
-
-		    //option to import data from a file, not done with this one yet. Will complete output before this. - Jack
-                    else if (tempInput == 1){
-                        //POTENTIAL: maybe look into having the user name the file they are importing from? -Jack
-                        fileName = "StudentInfo.txt";
-                        System.out.println("You have chosen to import data from file, 'StudentInfo.txt'.");
-                        //Make File class object to import data from
-                        File importFile = new File("StudentInfo.txt");
-                        Scanner inputFile = new Scanner(importFile);
-                        //include a try-catch statement here to make sure file is valid
-                        System.out.println("The file you chose was valid! Importing data now...");
-                        //use Scanner object to read data from each line, or something, in txt file
-                            //once using Scanner, assign that line to an object/field corresponding to what that line is for.
-                                // ^^ Will require the txt file to have its info formatted/saved in a certain way, probably in way not user friendly?
-                                //Could look into making way info is saved into txt file more user friendly and still having import function work.
-                        break;
-                    } 
-
-		    //option to save all student data to a text file. Mostly finished, need to fix saveInfo function, but that's about it. Maybe polish. - Jack
-                    else if (tempInput == 2){
-                        //POTENTIAL: maybe look into having the user name the file they want to create and save to? - Jack
-                        fileName = "StudentInfo.txt";
-                        System.out.println("You have chosen to save your student information to file, 'StudentInfo.txt'.");
-                        saveInfo(fileName);
-                    }
-                    }
-                    //catch for if file is not found for either save option or import option
-                    catch(FileNotFoundException e){
-                        System.out.println("File not found: " + e.getMessage());
-                    }
+			    
+		    try
+		    {
+	                    System.out.println("You have chosen to Save to or Import from a Text File.");
+	                    //Asking user if they want to back out of this option, save to a file, or import from a file
+			    System.out.println("Please enter the number of the option you want to choose.");
+	                    System.out.println("Enter 0: Exit to Menu\n" + 
+					       "Enter 1: Import information from a .txt file\n" + 
+					       "Enter 2: Save to a .txt file");
+	                    tempInput = keyboard.nextInt();
+	                    if(tempInput == 0)
+			    {
+	                        System.out.println("Exit input recognized. Returning to Main Menu...");
+	                        break;
+	                    }
+			    //option to import data from a file, not done with this one yet. Will complete output before this. - Jack
+	                    else if (tempInput == 1)
+			    {
+	                        //POTENTIAL: maybe look into having the user name the file they are importing from? -Jack
+	                        fileName = "StudentInfo.txt";
+	                        System.out.println("You have chosen to import data from file, 'StudentInfo.txt'.");
+	                        //Make File class object to import data from
+	                        File importFile = new File("StudentInfo.txt");
+	                        Scanner inputFile = new Scanner(importFile);
+	                        //include a try-catch statement here to make sure file is valid
+	                        System.out.println("The file you chose was valid! Importing data now...");
+	                        //use Scanner object to read data from each line, or something, in txt file
+	                            //once using Scanner, assign that line to an object/field corresponding to what that line is for.
+	                                // ^^ Will require the txt file to have its info formatted/saved in a certain way, probably in way not user friendly?
+	                                //Could look into making way info is saved into txt file more user friendly and still having import function work.
+	                        break;
+	                    } 
+	
+			    //option to save all student data to a text file. Mostly finished, need to fix saveInfo function, but that's about it. Maybe polish. - Jack
+	                    else if (tempInput == 2)
+			    {
+	                        //POTENTIAL: maybe look into having the user name the file they want to create and save to? - Jack
+	                        fileName = "StudentInfo.txt";
+	                        System.out.println("You have chosen to save your student information to file, 'StudentInfo.txt'.");
+	                        saveInfo(fileName);
+	                    }
+                    }//catch for if file is not found for either save option or import option
+                    catch(FileNotFoundException e)
+		    { System.out.println("File not found: " + e.getMessage()); }
                     //file input can be for one or multiple students, have input validation to make sure a file doesn't have nonsense
                     
                     //file output just puts current students into a file, such that it can be read later.
@@ -205,7 +195,7 @@ public class StudentManagementSystem
 
                      for (int i = 0; i < ClassSubjects.length; i++)
                     {
-                        ClassSubjects[i].sortStudent();	 //sort a class by grade, then output each student in the class
+                        ClassSubjects[i].sortStudent(); //sort a class by grade, then output each student in the class
                         for (int j = 0; j < ClassSubjects[i].getStudents().size(); j++)
                         {//walk through the arraylist in each subject
                             //output a report for each student
@@ -213,10 +203,10 @@ public class StudentManagementSystem
                         
                         }
                     }
-                    
+                    System.out.println(); //space for formatting
                     break;
                     
-                case 5: //subject report
+               case 5: //subject report
                     System.out.println("OUTPUTTING SUBJECT REPORT...");
                     //output an existing Subject class
                     //only output that subject's students with the highest and lowest grades, along with the class' overall average grade
@@ -225,18 +215,26 @@ public class StudentManagementSystem
                     {//present the possible choices of subject
                         System.out.println("Enter " + x + ": " + ClassSubjects[x].getName() );
                     }
+			System.out.println("Or Enter -1 to exit");
                     //get the index directly from the user
                     userInputSubject = keyboard.nextInt();
                     //validation
-                    while (userInputSubject < 0 || userInputSubject > ClassSubjects.length)
-                        {//if user input is invalid
+                    while (userInputSubject < -1 || userInputSubject > ClassSubjects.length)
+                    {//if user input is invalid
                         System.out.println("Your input was invalid, re-enter your choice: ");
                         userInputSubject = keyboard.nextInt();
-                        } //keep re-taking input until they are within a valid range
-                    
-                    //output the highest and lowest students (by grade)
-                    //and average grade in the class
-                    //this may seem complicated, but we just get the student and output a report
+                    } //keep re-taking input until they are within a valid range
+			    
+		    if (userInputSubject == -1) //exit only if user says to
+                    {break;}    
+                    //then check if there are no students in the subject
+                    else if (ClassSubjects[userInputSubject].getStudents().isEmpty())
+                    {//tell the user and break if it's empty
+                        System.out.println("\nThe Subject: " + ClassSubjects[userInputSubject].getName() + " is empty, and has no students.\n");
+                        break;
+                    }
+
+		    //output the highest and lowest students (by grade) and average grade in the class
                     System.out.println("For the Subject: " + ClassSubjects[userInputSubject].getName());
                     System.out.println("The highest grade in the class: ");
                     reportStudent(ClassSubjects[userInputSubject].getHighestStudent(), ClassSubjects[userInputSubject].getName());
@@ -244,6 +242,7 @@ public class StudentManagementSystem
                     reportStudent(ClassSubjects[userInputSubject].getLowestStudent(), ClassSubjects[userInputSubject].getName());
                     System.out.println("The average grade of the class is: " + ClassSubjects[userInputSubject].getAverageGrade());
                     
+                    System.out.println(); //empty space for formatting
                     break;
                     
                 default: //default is essentially for invalid input
@@ -272,12 +271,12 @@ public class StudentManagementSystem
         outputFile.close();
     }
 	
-    //Caleb -- Probably good enough. Maybe make formatting better if anything
+    //Caleb
     static Student createStudent()
     {//method that creates a basic student class
-        System.out.println("This method makes students, including names, ID, and grades for classes.");
-        Student madeStudent = new Student();
-        Scanner keyboard = new Scanner(System.in);
+    System.out.println("This method makes students, including names, ID, and grades for classes.");
+    Student madeStudent = new Student();
+    Scanner keyboard = new Scanner(System.in);
         
     System.out.println("Please enter the student's name");
     String input = keyboard.nextLine();
@@ -304,14 +303,13 @@ public class StudentManagementSystem
     
     //reports an individual student
     static void reportStudent(Student someone, String className)
-    {//takes a student object and outputs it nicely
+    {//takes a student object and the class name to output each student nicely
         System.out.printf("%-15s %-15s %-15s %-15s\n",someone.getName(),someone.getID(),className,someone.getGrade());
     }
     
 }// END OF CLASS
 
 //Caleb
-//Student may be an aggregate of the 'Subject' class, because 'Subject' can have many students within it
 class Student
 {//this class holds information about a student
     //attributes: ID, name, grades, etc.
@@ -320,7 +318,7 @@ class Student
     //single grade for an instance of a student
     private double Grade;
 
-     //accessors//
+    //accessors//
     public String getName()
     {return Name;}
     public String getID()
@@ -370,11 +368,10 @@ class Subject
     
     private String ClassName = "No Subject";	//no initial subject
     private String ClassID = "0000";    	//no class id
-    //each student will have a single grade in them for an instance of the subject.
-	//an array list of students that can be altered for each subject
+    //an array list of students that can be altered for each subject
     private ArrayList<Student> ClassStudents = new ArrayList<Student>(); 
 
-    //accessors
+    //accessors//
     public String getName()
     {return ClassName;}
     public String getID()
@@ -431,7 +428,7 @@ class Subject
         return loStudent; //return the Student with the lowest grade
     }
 
-    //mutators
+    //mutators//
     public void setName(String nm)
     {ClassName = nm;}
     public void setID(String id)
