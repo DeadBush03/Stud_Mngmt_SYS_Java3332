@@ -131,7 +131,7 @@ public class StudentManagementSystem
                         {break;}
                         
                         System.out.println("For the Subject: " + ClassSubjects[userInputSubject].getName());
-                        ClassSubjects[userInputSubject].addStudent(createStudent());
+                        ClassSubjects[userInputSubject].addStudent(createStudent( ClassSubjects[userInputSubject] ));
                     }
                     else //only other option is to remove
                     {
@@ -164,14 +164,17 @@ public class StudentManagementSystem
                         Scanner keyboard2 = new Scanner(System.in); //new keyboard for a string
                         String RemoveStudent = keyboard2.nextLine();
                         
-                        for (int j = 0; j < ClassSubjects[userInputSubject].getStudents().size(); j++)
-                        {//go through every class
-                            //walk through every student
-                            if (ClassSubjects[userInputSubject].getStudents().get(j).getID().equals(RemoveStudent)) //string comparison
-                            {//if found, remove every student in the subject with that ID
-                            ClassSubjects[userInputSubject].getStudents().remove(j);
-                            }
-                        }//end search through students in a class   
+                        int stuID = findStudent(ClassSubjects[userInputSubject], RemoveStudent); //find a student with that ID, return index
+                        
+                        if (stuID == -1) //not found
+                        { System.out.println("No student with that ID was found. No student removed.\n");}
+                        else //remove student if found
+                        { 
+                            ClassSubjects[userInputSubject].getStudents().remove(stuID); 
+                            System.out.println("Student with ID " + RemoveStudent + " was found and removed.\n");
+                        }
+                        
+                        
                     }//end remove student
                     
                     //otherwise, if user exits
@@ -260,9 +263,9 @@ I'm not seeing a new file get made and I don't know why...
                     //make it so they can either create a file for i/o or use an existing file
                     break;
                     
-                case 3: //Output AVERAGES
+                case 3: //output the average grade for a single student
                     System.out.println("OUTPUTTING AVERAGE OF A STUDENT'S GRADE...");
-                    //output the average grades for each student
+                    
                     //have user choose the ID of a student to find the average grade for
                     String SearchID;
                     System.out.println("Please enter the ID of the student you want to average. ex. '123':");
@@ -271,37 +274,39 @@ I'm not seeing a new file get made and I don't know why...
                     SearchID = keyboard2.nextLine();
                     
                     String FoundName = "No Student"; //name to call the student
+                    int foundIndex;                 //the index of the student (if found)
                     double totalgrade = 0;
-                    double averagegrade = 0;
                     double numtimes = 0;
+                    double averagegrade;            //calculated average of all the student's grades
                     
                     for (int i = 0; i < ClassSubjects.length; i++)
-                    {
+                    {//search through every class
                         ClassSubjects[i].sortStudent(); //sort a class by grade, then output each student in the class
-                        //may be useful if we implement binary search...
+                        
                         for (int j = 0; j < ClassSubjects[i].getStudents().size(); j++)
-                        {//go through every class
-                            //walk through every student
-                            if (ClassSubjects[i].getStudents().get(j).getID().equals(SearchID)) //string comparison
+                        {//go through every student
+                            foundIndex = findStudent(ClassSubjects[i], SearchID); //get index of student, returns -1 if not found
+                            
+                            if(foundIndex != -1)    //index IS found
                             {
-                                while (FoundName.equals("No Student")) //only get the student's name once
-                                { FoundName = ClassSubjects[i].getStudents().get(j).getName(); }
+                            while (FoundName.equals("No Student")) //only get the student's name once, assume it is correct
+                                { FoundName = ClassSubjects[i].getStudents().get(foundIndex).getName(); }
                                 //accumulate total grade of found student
-                                totalgrade += ClassSubjects[i].getStudents().get(j).getGrade();
+                                totalgrade += ClassSubjects[i].getStudents().get(foundIndex).getGrade();
                                 //number of times the student is found +1
                                 numtimes++;
                             }
-                        }//end search through students in a class   
-                    }   //at the end, we've searched through every student in every class subject
-                        //if we've found the student zero times...
+                        } 
+                    }    
+                    //if we've found the student zero times...
                         if (numtimes == 0)
                         {
-                            System.out.println("Sorry, we could not find a student with the ID: " + SearchID);
+                            System.out.println("Sorry, we could not find a student with the ID: " + SearchID + "\n");
                             break;
                         } //exit if there are no students with that ID
                         //else...
                         averagegrade = totalgrade/numtimes;
-                        System.out.println("\nThe student: " + FoundName + ", ID: " + SearchID +
+                        System.out.println("\nThe student: " + FoundName + "\nID: " + SearchID +
                                 "\nhas an average grade of " + averagegrade + " across all subjects.");
                     System.out.println(); //space for formatting
                     break;
@@ -319,7 +324,7 @@ I'm not seeing a new file get made and I don't know why...
                         for (int j = 0; j < ClassSubjects[i].getStudents().size(); j++)
                         {//walk through the arraylist in each subject
                             //output a report for each student
-                            reportStudent( ClassSubjects[i].getStudents().get(j),ClassSubjects[i].getName() );
+                            reportStudent( ClassSubjects[i].getStudents().get(j), ClassSubjects[i].getName());
                         }
                     }
                     System.out.println(); //space for formatting
@@ -356,9 +361,9 @@ I'm not seeing a new file get made and I don't know why...
 		    //output the highest and lowest students (by grade) and average grade in the class
                     System.out.println("For the Subject: " + ClassSubjects[userInputSubject].getName());
                     System.out.println("The highest grade in the class: ");
-                    reportStudent(ClassSubjects[userInputSubject].getHighestStudent(), ClassSubjects[userInputSubject].getName());
+                    reportStudent( ClassSubjects[userInputSubject].getHighestStudent(), ClassSubjects[userInputSubject].getName());
                     System.out.println("The lowest grade in the class: ");
-                    reportStudent(ClassSubjects[userInputSubject].getLowestStudent(), ClassSubjects[userInputSubject].getName());
+                    reportStudent( ClassSubjects[userInputSubject].getLowestStudent(), ClassSubjects[userInputSubject].getName());
                     System.out.println("The average grade of the class is: " + ClassSubjects[userInputSubject].getAverageGrade());
                     
                     System.out.println(); //empty space for formatting
@@ -372,6 +377,7 @@ I'm not seeing a new file get made and I don't know why...
         
         
     }// end main
+
 
     //Function to save all student information to a text file.
     //THIS FUNCTION CANNOT ACCESS ClassSubjects[i], WILL HAVE TO MOVE IT TO SOMEWHERE IT CAN ACCESS THEM - Jack
@@ -391,41 +397,70 @@ I'm not seeing a new file get made and I don't know why...
 //    }
 	
     //Caleb
-    static Student createStudent()
+    static Student createStudent(Subject thisClass) //thisClass for ID validation
     {//method that creates a basic student class
     System.out.println("This method makes students, including names, ID, and grades for classes.");
     Student madeStudent = new Student();
     Scanner keyboard = new Scanner(System.in);
+
+    System.out.println("Please enter the student's ID number"); //validation to check that no students have the same ID in the same class
+    String inputID = keyboard.nextLine();
+    int sameIDfound = findStudent(thisClass, inputID); //see if the ID is already in use
+    	//validation//
+        while(sameIDfound != -1) // -1 means ID is not in use
+            {
+            System.out.print("INVALID INPUT. \nAnother student has that ID... Re-enter: ");
+            inputID = keyboard.nextLine();
+            sameIDfound = findStudent(thisClass, inputID); //check if the next ID is valid
+            //just repeat until the user enters a valid input
+            }
+    madeStudent.setID(inputID); //set ID as valid input
         
-    System.out.println("Please enter the student's name");
+    System.out.println("Please enter the student's name"); //get name after ID to help prevent user gaffs
     String input = keyboard.nextLine();
     madeStudent.setName(input);
     
-    System.out.println("Please enter the student's ID number"); //this will probably not need validation as ID can be numbers and letters...
-    String inputID = keyboard.nextLine();
-    madeStudent.setID(inputID);
-    
     System.out.println("Please enter the student's grade"); 
     double inputGrade = keyboard.nextDouble();
-        //validation
-    while (inputGrade < 0 || inputGrade > 100)
-    {
-        System.out.print("INVALID INPUT." + 
-        "\nPlease enter a valid grade (0-100): ");
-        inputGrade = keyboard.nextDouble();
-        //just repeat until the user enters a valid input
-    }
+        //validation//
+    	while (inputGrade < 0 || inputGrade > 100)
+    		{
+	        System.out.print("INVALID INPUT." + 
+	        "\nPlease enter a valid grade (0-100): ");
+	        inputGrade = keyboard.nextDouble();
+	        //just repeat until the user enters a valid input
+	    	}
     madeStudent.setGrade(inputGrade);
         
         return madeStudent;
     }//end createStudent
+    
+    //give a Subject, and a search ID
+    //find the student with that ID
+    //return the index of that student (in the arraylist), or -1 if not found
+    static int findStudent(Subject someClass, String someID)
+    {
+        int indexID = -1; // the index of the student in the subject
+        
+        for (int j = 0; j < someClass.getStudents().size(); j++)
+        {//walk through every student
+                            if (someClass.getStudents().get(j).getID().equals(someID)) //string comparison
+                            {
+                            indexID = j; //it is reasonable to assume there is only one instance of a student per class.
+                            break;
+                            }
+        }//end search through students in a class  
+        
+    
+        return indexID; //-1 if not found
+    }
     
     //reports an individual student
     static void reportStudent(Student someone, String className)
     {//takes a student object and the class name to output each student nicely
         System.out.printf("%-15s %-15s %-15s %-15s\n",someone.getName(),someone.getID(),className,someone.getGrade());
     }
-    
+    //end of methods
 }// END OF CLASS
 
 //Caleb
