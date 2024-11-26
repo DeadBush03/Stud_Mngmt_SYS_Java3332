@@ -39,7 +39,7 @@ import java.util.ArrayList;
 
 public class StudentManagementSystem 
 {
-    public static void main(String[] args) 
+     public static void main(String[] args) 
     {  
                 
         Scanner keyboard = new Scanner(System.in); //user input
@@ -100,8 +100,10 @@ public class StudentManagementSystem
                 case 1: //student information
                     System.out.println("You chose to Alter Student Information");
                     //ask user if they want to add/remove a student
-                    System.out.println("Would you like to add or remove a student?"
-                            + "\n-1 - Exit\n0 - add student\n1 - remove student");
+                    System.out.println("Would you like to add or remove a student?\n"
+                            + "-1 - Exit\n"
+                            + "0 - add student\n"
+                            + "1 - remove student");
                     int AddRemove = 2; //nonsense starting value
                     
                     //validation//
@@ -229,25 +231,32 @@ public class StudentManagementSystem
 	                       	//Start of import data code
 	                       	//While loop looks at first line(the one that has the class listed) and goes through ClassSubjects until it gets to index that has that same name
 	                      	//It then saves that index so student info can be input at that index.
+	                       		                      	//It then saves that index so student info can be input at that index.
 	                       	while(inputFile.hasNextLine()){
 	                        	x=0;
 	                        	String classIndexName = inputFile.nextLine();
 					if(classIndexName.startsWith(" ")){
 						break;
 					}
-	                        	while(classIndexName.equals(ClassSubjects[x].getName())){
-	                        		x++;
-	                                	if(x >= 4){
+	                        	while(classIndexName.equals(ClassSubjects[x].getName()))
+                                        {
+	                                	if(x >= ClassSubjects.length )
+                                                {
 	                                    	System.out.println("The file you chose had an invalid class. Returning to Main Menu...");
 	                                    	break;
-	                                	}	
-	                            	}
-					tempName = inputFile.nextLine();
+	                                	}
+                                                
+                                        tempName = inputFile.nextLine();
 	                           	tempID = inputFile.nextLine();
 	                            	tempGrade = inputFile.nextDouble();
 	                            	inputFile.nextLine();
-	                            	ClassSubjects[x].addStudent(importStudent(tempName, tempID, tempGrade));
+                                        Student importStudent = new Student(tempName, tempID, tempGrade); //create the student
+	                            	ClassSubjects[x].addStudent( importStudent ); //add the student
 	                            	inputFile.nextLine();
+                                        
+                                        x++; //only add one at the very end
+	                            	}
+					
 	                       	}
 	                        break;
 	                    } 
@@ -264,10 +273,10 @@ public class StudentManagementSystem
                                     ClassSubjects[i].sortStudent();
                                     for (int j = 0; j < ClassSubjects[i].getStudents().size(); j++)
                                     {
-                                        outputFile.println(ClassSubjects[i].getName());
-                                        outputFile.println(ClassSubjects[i].getStudents().get(j).getName());
-                                        outputFile.println(ClassSubjects[i].getStudents().get(j).getID());
-                                        outputFile.println(ClassSubjects[i].getStudents().get(j).getGrade());
+                                        outputFile.println( ClassSubjects[i].getName());
+                                        outputFile.println( ClassSubjects[i].getStudents().get(j).getName() );
+                                        outputFile.println( ClassSubjects[i].getStudents().get(j).getID() );
+                                        outputFile.println( ClassSubjects[i].getStudents().get(j).getGrade());
                                         outputFile.println();
                                     }
                                 }
@@ -381,9 +390,9 @@ public class StudentManagementSystem
 		    //output the highest and lowest students (by grade) and average grade in the class
                     System.out.println("For the Subject: " + ClassSubjects[userInputSubject].getName());
                     System.out.println("The highest grade in the class: ");
-                    reportStudent( ClassSubjects[userInputSubject].getHighestStudent(), ClassSubjects[userInputSubject].getName());
+                    reportStudent(ClassSubjects[userInputSubject].getHighestStudent(), ClassSubjects[userInputSubject].getName());
                     System.out.println("The lowest grade in the class: ");
-                    reportStudent( ClassSubjects[userInputSubject].getLowestStudent(), ClassSubjects[userInputSubject].getName());
+                    reportStudent(ClassSubjects[userInputSubject].getLowestStudent(), ClassSubjects[userInputSubject].getName());
                     System.out.println("The average grade of the class is: " + ClassSubjects[userInputSubject].getAverageGrade());
                     
                     System.out.println(); //empty space for formatting
