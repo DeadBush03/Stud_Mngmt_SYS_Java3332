@@ -101,32 +101,32 @@ public class StudentManagementSystem
                     System.out.println("You chose to Alter Student Information");
                     //ask user if they want to add/remove a student
                     System.out.println("Would you like to add or remove a student?\n"
-                            + "-1 - Exit\n"
-                            + "0 - add student\n"
-                            + "1 - remove student");
-                    int AddRemove = 2; //nonsense starting value
+                            + "0 - Exit\n"
+                            + "1 - add student\n"
+                            + "2 - remove student");
+                    int AddRemove = 3; //nonsense starting value
                     
                     //validation//
                     AddRemove = keyboard.nextInt();
                     do //repeat what the user said until they choose to exit
                     {
                     //if 1 or 0, do something now that we've validated
-                    if (AddRemove == 0)
+                    if (AddRemove == 1)
                     {
                         //add
                         System.out.println("What subject do you want to add one student to?");
                         for (int x = 0; x < ClassSubjects.length; x++)
                         {//present the possible choices of subject
-                            System.out.println("Enter " + x + ": " + ClassSubjects[x].getName() );
+                            System.out.println("Enter " + (x+1) + ": " + ClassSubjects[x].getName() );
                         }
-                            System.out.println("Or Enter -1 to exit");
+                            System.out.println("Or Enter 0 to exit");
                         //get the index directly from the user
-                        int userInputSubject = keyboard.nextInt();
+                        int userInputSubject = keyboard.nextInt() - 1; //minus one to make it easy for user
                         //validation
                         while (userInputSubject < -1 || userInputSubject > ClassSubjects.length)
                             {//if user input is invalid
                             System.out.println("Your input was invalid, re-enter your choice: ");
-                            userInputSubject = keyboard.nextInt();
+                            userInputSubject = keyboard.nextInt() - 1;
                             } //keep re-taking input until they are within a valid range
 
                         if (userInputSubject == -1) //exit only if user says to
@@ -135,22 +135,22 @@ public class StudentManagementSystem
                         System.out.println("For the Subject: " + ClassSubjects[userInputSubject].getName());
                         ClassSubjects[userInputSubject].addStudent(createStudent( ClassSubjects[userInputSubject] ));
                     }
-                    else //only other option is to remove
+                    else if (AddRemove == 2) //only other option is to remove
                     {
                         //get subject from user
                             System.out.println("What subject do you want to remove a student from?");
                             for (int x = 0; x < ClassSubjects.length; x++)
                             {//present the possible choices of subject
-                                System.out.println("Enter " + x + ": " + ClassSubjects[x].getName() );
+                                System.out.println("Enter " + (x+1) + ": " + ClassSubjects[x].getName() );
                             }
-                            System.out.println("Or Enter -1 to exit");
+                            System.out.println("Or Enter 0 to exit");
                             //get the index directly from the user
-                            int userInputSubject = keyboard.nextInt();
+                            int userInputSubject = keyboard.nextInt() - 1;
                             //validation
                             while (userInputSubject < -1 || userInputSubject > ClassSubjects.length)
                             {//if user input is invalid
                                 System.out.println("Your input was invalid, re-enter your choice: ");
-                                userInputSubject = keyboard.nextInt();
+                                userInputSubject = keyboard.nextInt() - 1;
                             } //keep re-taking input until they are within a valid range
 
                             if (userInputSubject == -1) //exit only if user says to
@@ -180,15 +180,15 @@ public class StudentManagementSystem
                     }//end remove student
                     
                     //otherwise, if user exits
-                    if (AddRemove == -1)//exit if -1
+                    else if (AddRemove == 0)//exit if -1
                     {break;}
-                    else if (AddRemove != 0 && AddRemove != 1) //if it's not 0 and not 1
+                    else //if it's not 0 and not 1 or 2
                         { 
                         System.out.println("INVALID INPUT. Please re-enter a valid number:"); 
                         AddRemove = keyboard.nextInt(); //re-take input if invalid
                         }
                     } 
-                    while (AddRemove != -1); //keep repeating until user chooses to exit
+                    while (AddRemove != 0); //keep repeating until user chooses to exit
 
                     break;
                     
