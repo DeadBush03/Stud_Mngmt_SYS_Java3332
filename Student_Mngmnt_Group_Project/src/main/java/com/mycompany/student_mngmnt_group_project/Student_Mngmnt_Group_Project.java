@@ -222,6 +222,33 @@ public class StudentManagementSystem
 	                            //once using Scanner, assign that line to an object/field corresponding to what that line is for.
 	                                // ^^ Will require the txt file to have its info formatted/saved in a certain way, probably in way not user friendly?
 	                                //Could look into making way info is saved into txt file more user friendly and still having import function work.
+				int x;
+				String tempName;
+				String tempID;
+				double tempGrade;
+	                       	//Start of import data code
+	                       	//While loop looks at first line(the one that has the class listed) and goes through ClassSubjects until it gets to index that has that same name
+	                      	//It then saves that index so student info can be input at that index.
+	                       	while(inputFile.hasNextLine()){
+	                        	x=0;
+	                        	String classIndexName = inputFile.nextLine();
+					if(classIndexName.startsWith(" ")){
+						break;
+					}
+	                        	while(classIndexName.equals(ClassSubjects[x].getName())){
+	                        		x++;
+	                                	if(x >= 4){
+	                                    	System.out.println("The file you chose had an invalid class. Returning to Main Menu...");
+	                                    	break;
+	                                	}	
+	                            	}
+					tempName = inputFile.nextLine();
+	                           	tempID = inputFile.nextLine();
+	                            	tempGrade = inputFile.nextDouble();
+	                            	inputFile.nextLine();
+	                            	ClassSubjects[x].addStudent(importStudent(tempName, tempID, tempGrade));
+	                            	inputFile.nextLine();
+	                       	}
 	                        break;
 	                    } 
 	
@@ -231,13 +258,6 @@ public class StudentManagementSystem
 	                        //POTENTIAL: maybe look into having the user name the file they want to create and save to? - Jack
 	                        fileName = "StudentInfo.txt";
 	                        System.out.println("You have chosen to save your student information to file, 'StudentInfo.txt'.");
-                                
-                                
-// -caleb
-/*
-I moved this to see if it would work...
-I'm not seeing a new file get made and I don't know why...
-        */
 	                        PrintWriter outputFile = new PrintWriter(fileName);
                                 for (int i = 0; i < ClassSubjects.length; i++)
                                 {
@@ -377,24 +397,6 @@ I'm not seeing a new file get made and I don't know why...
         
         
     }// end main
-
-
-    //Function to save all student information to a text file.
-    //THIS FUNCTION CANNOT ACCESS ClassSubjects[i], WILL HAVE TO MOVE IT TO SOMEWHERE IT CAN ACCESS THEM - Jack
-//    static void saveInfo(String FileN){
-//        PrintWriter outputFile = new PrintWriter(FileN);
-//        for (int i = 0; i < ClassSubjects.length; i++){
-//            ClassSubjects[i].sortStudent();
-//            for (int j = 0; j < ClassSubjects[i].getStudents().size(); j++){
-//                outputFile.println(ClassSubjects[i].getName());
-//                outputFile.println(ClassSubjects[i].getStudents().get(j).getName());
-//                outputFile.println(ClassSubjects[i].getStudents().get(j).getID());
-//                outputFile.println(ClassSubjects[i].getStudents().get(j).getGrade());
-//                outputFile.println();
-//            }
-//        }
-//        outputFile.close();
-//    }
 	
     //Caleb
     static Student createStudent(Subject thisClass) //thisClass for ID validation
