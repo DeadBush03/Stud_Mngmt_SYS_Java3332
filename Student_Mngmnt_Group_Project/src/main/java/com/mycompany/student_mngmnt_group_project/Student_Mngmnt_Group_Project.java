@@ -196,7 +196,7 @@ public class StudentManagementSystem
 			    
 		    try
 		    {
-                        //NEEDS INPUT VALIDATION
+                        
 	                    System.out.println("You have chosen to Save to or Import from a Text File.");
 	                    //Asking user if they want to back out of this option, save to a file, or import from a file
 			    System.out.println("Please enter the number of the option you want to choose.");
@@ -209,10 +209,9 @@ public class StudentManagementSystem
 	                        System.out.println("Exit input recognized. Returning to Main Menu...");
 	                        break;
 	                    }
-			    //option to import data from a file, not done with this one yet. Will complete output before this. - Jack
+			    //option to import data from a file, not done with this one yet.
 	                    else if (tempInput == 1)
 			    {
-	                        //POTENTIAL: maybe look into having the user name the file they are importing from? -Jack
 	                        fileName = "StudentInfo.txt";
 	                        System.out.println("You have chosen to import data from file, 'StudentInfo.txt'.");
 	                        //Make File class object to import data from
@@ -245,8 +244,8 @@ public class StudentManagementSystem
 	                                    	System.out.println("The file you chose had an invalid class. Returning to Main Menu...");
 	                                    	break;
 	                                	}
-                                                
-                                        tempName = inputFile.nextLine();
+                                               
+                                        tempName = inputFile.nextLine(); //code with 'temp' grabs what that line holds and assigns it to the corresponding part of the Student class.
 	                           	tempID = inputFile.nextLine();
 	                            	tempGrade = inputFile.nextDouble();
 	                            	inputFile.nextLine();
@@ -261,17 +260,17 @@ public class StudentManagementSystem
 	                        break;
 	                    } 
 	
-			    //option to save all student data to a text file. Mostly finished, need to fix saveInfo function, but that's about it. Maybe polish. - Jack
+			    //option to save all student data to a text file.
 	                    else if (tempInput == 2)
 			    {
-	                        //POTENTIAL: maybe look into having the user name the file they want to create and save to? - Jack
+	                        
 	                        fileName = "StudentInfo.txt";
 	                        System.out.println("You have chosen to save your student information to file, 'StudentInfo.txt'.");
 	                        PrintWriter outputFile = new PrintWriter(fileName);
                                 for (int i = 0; i < ClassSubjects.length; i++)
                                 {
                                     ClassSubjects[i].sortStudent();
-                                    for (int j = 0; j < ClassSubjects[i].getStudents().size(); j++)
+                                    for (int j = 0; j < ClassSubjects[i].getStudents().size(); j++) //goes through class objects and outputs the course name, student name, student id, and student's grade in that course, in that order.
                                     {
                                         outputFile.println( ClassSubjects[i].getName());
                                         outputFile.println( ClassSubjects[i].getStudents().get(j).getName() );
