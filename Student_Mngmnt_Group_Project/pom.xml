@@ -9,6 +9,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>22</maven.compiler.source>
         <maven.compiler.target>22</maven.compiler.target>
-        <exec.mainClass>com.mycompany.student_mngmnt_group_project.Student_Mngmnt_Group_Project</exec.mainClass>
+        <exec.mainClass>com.mycompany.student_mngmnt_group_project.StudentManagementSystem</exec.mainClass>
     </properties>
 </project>
